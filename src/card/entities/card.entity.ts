@@ -1,16 +1,36 @@
-import { User } from "@src/user/entities/user.entity";
-import { Column, Entity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
-@Entity({ name: "card" })
-export class Card extends User{
+@Entity({ name: 'card', schema: 'personfinance' })
+export class Card {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    card_number: string;
-    
-    @Column()
-    credit_limit: number;
-    
-    @Column()
-    day_payment: number;
-    
+  @Column()
+  cardNumber: string;
+
+  @Column()
+  cardHolderName: string;
+
+  @Column()
+  expirationDate: Date;
+
+  @Column()
+  cvv: string;
+
+  @Column()
+  brand: string;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @Column()
+  limit: number;
+
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.cards)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 }

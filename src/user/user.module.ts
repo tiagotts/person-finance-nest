@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { userProviders } from './user.providers';
 import { DatabaseModule } from '@src/share/module/database.module';
+import { Type } from 'class-transformer';
 
 @Module({
   imports: [DatabaseModule],
