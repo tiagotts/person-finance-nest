@@ -1,0 +1,17 @@
+name: 'person-finance'
+
+services:
+  db:
+    image: postgres:17
+    restart: always
+    container_name: person-finance-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=person_finance_db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '5432:5432'
+    volumes:
+      - .data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "listen_addresses=*"]
