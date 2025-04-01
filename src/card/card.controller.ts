@@ -1,34 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { CardService } from './card.service';
-import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
+import { Card } from './entities/card.entity';
 
-@Controller('card')
+@Controller('cards')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post()
-  create(@Body() createCardDto: CreateCardDto) {
+  async create(@Body() createCardDto: Partial<Card>): Promise<Card> {
     return this.cardService.create(createCardDto);
   }
 
   @Get()
-  findAll() {
-    return this.cardService.findAll();
+  async findAll(): Promise<Card[]> {
+    // TODO: Get userId from authentication
+    const userId = 'temp-user-id';
+    return this.cardService.findAll(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cardService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Card> {
+    // TODO: Get userId from authentication
+    const userId = 'temp-user-id';
+    return this.cardService.findOne(id, userId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCardDto: UpdateCardDto) {
-    return this.cardService.update(+id, updateCardDto);
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateCardDto: Partial<Card>,
+  ): Promise<Card> {
+    // TODO: Get userId from authentication
+    const userId = 'temp-user-id';
+    return this.cardService.update(id, userId, updateCardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardService.remove(+id);
+  async remove(@Param('id') id: string): Promise<void> {
+    // TODO: Get userId from authentication
+    const userId = 'temp-user-id';
+    return this.cardService.remove(id, userId);
   }
 }

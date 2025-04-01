@@ -1,7 +1,7 @@
 name: 'person-finance'
 
 services:
-  db:
+  postgres:
     image: postgres:17
     restart: always
     container_name: person-finance-db
@@ -15,3 +15,24 @@ services:
     volumes:
       - .data:/var/lib/postgresql/data
     command: ["postgres", "-c", "listen_addresses=*"]
+
+  # Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: person_finance_db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/

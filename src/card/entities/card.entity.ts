@@ -1,36 +1,49 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { User } from '@src/user/entities/user.entity';
+import { Transaction } from '@src/transaction/entities/transaction.entity';
+import { ImportFile } from '@src/import/entities/import-file.entity';
 
-@Entity({ name: 'card', schema: 'personfinance' })
+@Entity('cards')
 export class Card {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
-  cardNumber: string;
+  name: string;
 
   @Column()
-  cardHolderName: string;
+  number: string;
 
   @Column()
   expirationDate: Date;
 
   @Column()
-  cvv: string;
+  closingDay: number;
 
   @Column()
-  brand: string;
+  dueDay: number;
 
-  @Column({ default: true })
-  isActive: boolean;
-
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   limit: number;
 
-  @Column()
-  userId: number;
+  @Column({ default: true })
+  active: boolean;
 
-  @ManyToOne(() => User, (user) => user.cards)
-  @JoinColumn({ name: 'userId' })
+  @ManyToOne(() => User, user => user.cards)
   user: User;
+
+  @Column()
+  userId: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
+
+  @OneToMany(() => Transaction, transaction => transaction.card)
+  transactions: Transaction[];
+
+  @OneToMany(() => ImportFile, importFile => importFile.card)
+  imports: ImportFile[];
 }
